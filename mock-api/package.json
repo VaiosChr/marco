@@ -1,0 +1,12 @@
+{
+  "name": "marco-mock-api",
+  "version": "1.0.0",
+  "description": "MARCO mock API (json-server) for Flutter take-home assignment",
+  "scripts": {
+    "start": "json-server --watch db.json --routes routes.json --middlewares middleware.js --port 3000",
+    "start:host": "json-server --watch db.json --routes routes.json --middlewares middleware.js --port 3000 --host 0.0.0.0"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}

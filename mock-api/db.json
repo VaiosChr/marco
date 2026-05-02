@@ -1,0 +1,188 @@
+{
+  "parents": [
+    {
+      "id": "p1",
+      "name": "Demo Parent",
+      "email": "demo@marco.app",
+      "password": "hashed_demo_password",
+      "phone": "+306900000001",
+      "neighborhood": "Kalamaria",
+      "isLegalGuardian": true,
+      "createdAt": "2026-01-01T10:00:00Z"
+    }
+  ],
+
+  "sessions": [
+    {
+      "id": "s1",
+      "parentId": "p1",
+      "token": "demo-token-abc123",
+      "createdAt": "2026-01-01T10:00:00Z",
+      "expiresAt": "2026-12-31T23:59:59Z"
+    }
+  ],
+
+  "otp_requests": [],
+
+  "children": [
+    {
+      "id": "c1",
+      "parentId": "p1",
+      "name": "Alex",
+      "age": 9,
+      "school": "3rd Primary School of Kalamaria",
+      "phone": "+306900000099",
+      "coParentPhone": null,
+      "coParentEmail": null,
+      "consents": {
+        "anonymizedRouteData": true,
+        "aiRouteSuggestions": true,
+        "municipalityDataSharing": false
+      },
+      "createdAt": "2026-01-01T10:05:00Z"
+    }
+  ],
+
+  "routes": [
+    {
+      "id": "r1",
+      "childId": "c1",
+      "parentId": "p1",
+      "name": "Morning Route",
+      "startPoint": {
+        "lat": 40.5823,
+        "lng": 22.9485,
+        "label": "Near Home (privacy offset)"
+      },
+      "endPoint": {
+        "lat": 40.5891,
+        "lng": 22.9512,
+        "label": "3rd Primary School of Kalamaria"
+      },
+      "waypoints": [
+        { "lat": 40.5835, "lng": 22.9490 },
+        { "lat": 40.5857, "lng": 22.9501 }
+      ],
+      "createdAt": "2026-01-02T08:00:00Z"
+    }
+  ],
+
+  "route_status": [
+    {
+      "id": "rs1",
+      "routeId": "r1",
+      "safety": 8.2,
+      "airQuality": 6.5,
+      "noiseDb": 62,
+      "overallStatus": "CAUTION",
+      "updatedAt": "2026-04-30T08:00:00Z"
+    }
+  ],
+
+  "ai_suggestions": [
+    {
+      "id": "as1",
+      "routeId": "r1",
+      "triggeredByStatus": "CAUTION",
+      "message": "Hi! I noticed air quality is slightly elevated on your usual route. I found a quieter alternative through the park that has better air quality and less traffic. It adds only 3 minutes to your walk! 🌿",
+      "alternativeRoute": {
+        "name": "Park Route",
+        "waypoints": [
+          { "lat": 40.5830, "lng": 22.9480 },
+          { "lat": 40.5845, "lng": 22.9470 },
+          { "lat": 40.5870, "lng": 22.9490 },
+          { "lat": 40.5891, "lng": 22.9512 }
+        ],
+        "estimatedMinutes": 18,
+        "safety": 9.1,
+        "airQuality": 8.7,
+        "noiseDb": 48
+      },
+      "createdAt": "2026-04-30T08:01:00Z"
+    }
+  ],
+
+  "suggestion_feedback": [],
+
+  "trip_logs": [
+    {
+      "id": "tl1",
+      "childId": "c1",
+      "parentId": "p1",
+      "date": "2026-04-29",
+      "routeTaken": "usual",
+      "mood": "happy",
+      "notes": "",
+      "pointsEarned": 10,
+      "createdAt": "2026-04-29T09:00:00Z"
+    }
+  ],
+
+  "rewards": [
+    {
+      "id": "rw1",
+      "parentId": "p1",
+      "totalPoints": 170,
+      "level": 2,
+      "levelName": "Green Walker",
+      "streakDays": 5,
+      "nextLevelPoints": 300,
+      "badges": [
+        {
+          "id": "b1",
+          "name": "First Steps",
+          "description": "Logged your first trip",
+          "icon": "🥾",
+          "earnedAt": "2026-01-02T09:00:00Z"
+        },
+        {
+          "id": "b2",
+          "name": "Air Aware",
+          "description": "Used an AI suggestion to avoid pollution",
+          "icon": "💨",
+          "earnedAt": "2026-01-08T09:00:00Z"
+        },
+        {
+          "id": "b3",
+          "name": "5-Day Streak",
+          "description": "Walked 5 days in a row",
+          "icon": "🔥",
+          "earnedAt": "2026-01-10T09:00:00Z"
+        }
+      ],
+      "dailyChallenge": {
+        "id": "dc1",
+        "description": "Log today's trip before 9 AM",
+        "rewardPoints": 20,
+        "progress": 0,
+        "total": 1,
+        "completed": false,
+        "expiresAt": "2026-05-01T23:59:59Z"
+      },
+      "updatedAt": "2026-04-29T09:00:00Z"
+    }
+  ],
+
+  "kid_profiles": [
+    {
+      "id": "kp1",
+      "childId": "c1",
+      "name": "Alex",
+      "avatarEmoji": "🦊",
+      "totalPoints": 85,
+      "level": 1,
+      "levelName": "Little Explorer",
+      "streakDays": 5,
+      "todayWalk": {
+        "routeName": "Morning Route",
+        "status": "CAUTION",
+        "tip": "The air is a little smoky today. Try breathing through your nose! 👃"
+      },
+      "recentMoods": ["happy", "neutral", "happy", "happy", "excited"],
+      "badges": [
+        { "id": "kb1", "name": "Explorer", "icon": "🗺️" },
+        { "id": "kb2", "name": "Sunshine Walker", "icon": "☀️" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "/api/parents/:id": "/parents/:id",
+  "/api/parents": "/parents",
+
+  "/api/sessions": "/sessions",
+  "/api/sessions/:id": "/sessions/:id",
+
+  "/api/otp/request": "/otp_requests",
+  "/api/otp/verify": "/otp_requests",
+
+  "/api/children": "/children",
+  "/api/children/:id": "/children/:id",
+
+  "/api/routes": "/routes",
+  "/api/routes/:id": "/routes/:id",
+
+  "/api/route-status": "/route_status",
+  "/api/route-status/:id": "/route_status/:id",
+
+  "/api/ai-suggestions": "/ai_suggestions",
+  "/api/ai-suggestions/:id": "/ai_suggestions/:id",
+
+  "/api/suggestion-feedback": "/suggestion_feedback",
+  "/api/suggestion-feedback/:id": "/suggestion_feedback/:id",
+
+  "/api/trip-logs": "/trip_logs",
+  "/api/trip-logs/:id": "/trip_logs/:id",
+
+  "/api/rewards": "/rewards",
+  "/api/rewards/:id": "/rewards/:id",
+
+  "/api/kid-profiles": "/kid_profiles",
+  "/api/kid-profiles/:id": "/kid_profiles/:id"
+}
