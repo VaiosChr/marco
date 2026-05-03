@@ -2,7 +2,7 @@
 // json-server middleware for MARCO mock API
 // Run with: json-server --watch db.json --routes routes.json --middlewares middleware.js --port 3000
 
-export default (req, res, next) => {
+module.exports = (req, res, next) => {
   // ── CORS headers (useful during Flutter dev) ──────────────────────────────
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');

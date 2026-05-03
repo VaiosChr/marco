@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
 import 'package:marco/features/auth/presentation/providers/auth_provider.dart';
@@ -8,7 +9,15 @@ import 'package:marco/features/auth/presentation/widgets/custom_form_field.dart'
 import 'package:marco/features/auth/presentation/widgets/home_area.dart';
 import 'package:marco/shared/widgets/custom_buttons.dart';
 
-class SignupScreen extends ConsumerWidget {
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
+
+  @override
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -18,16 +27,38 @@ class SignupScreen extends ConsumerWidget {
   final TextEditingController _countryCodeController = TextEditingController(
     text: '+30',
   );
-
-  SignupScreen({super.key});
+  String _neighborhood = '';
+  bool isTermsAccepted = false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneController.dispose();
+    _countryCodeController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Sign Up', style: AppTextStyles.title)),
+        title: Center(
+          child: Column(
+            children: [
+              Text('Sign Up', style: AppTextStyles.title),
+              // const SizedBox(height: 4),
+              const Text(
+                'Step 1 of 3 - Create Your Account',
+                style: AppTextStyles.headline1,
+              ),
+            ],
+          ),
+        ),
       ),
       body: Center(
         child: authState.isLoading
@@ -35,135 +66,308 @@ class SignupScreen extends ConsumerWidget {
             : SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomFormField(
-                        controller: _nameController,
-                        label: 'Name',
-                        icon: Icons.person,
-                      ),
-                      const SizedBox(height: 16),
-                      CustomFormField(
-                        controller: _emailController,
-                        label: 'Email',
-                        keyboardType: TextInputType.emailAddress,
-                        icon: Icons.email,
-                      ),
-                      const SizedBox(height: 16),
-                      CustomFormField(
-                        controller: _passwordController,
-                        isPassword: true,
-                        label: 'Password',
-                        keyboardType: TextInputType.text,
-                        icon: Icons.lock,
-                        suffixIcon: Icons.visibility_off,
-                        onSuffixPressed: () {},
-                      ),
-                      const SizedBox(height: 16),
-                      CustomFormField(
-                        controller: _confirmPasswordController,
-                        isPassword: true,
-                        label: 'Confirm Password',
-                        keyboardType: TextInputType.text,
-                        icon: Icons.lock,
-                        suffixIcon: Icons.visibility_off,
-                        onSuffixPressed: () {},
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: CustomFormField(
-                              controller: _countryCodeController,
-                              keyboardType: TextInputType.number,
-                              icon: Icons.phone,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            flex: 2,
-                            child: CustomFormField(
-                              controller: _phoneController,
-                              label: 'Phone Number',
-                              keyboardType: TextInputType.phone,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      HomeAreaDropdown(onAreaSelected: (area) {}),
-
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Checkbox(value: false, onChanged: (value) {}),
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                text:
-                                    'I confirm I am the legal guardian and agree to the ',
-                                style: AppTextStyles.body,
-                                children: [
-                                  TextSpan(
-                                    text: 'Terms',
-                                    style: AppTextStyles.body.copyWith(
-                                      color: AppColorsLight.primary,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // Handle terms and conditions tap
-                                      },
-                                  ),
-                                  const TextSpan(text: ' and '),
-                                  TextSpan(
-                                    text: 'Privacy Policy',
-                                    style: AppTextStyles.body.copyWith(
-                                      color: AppColorsLight.primary,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // Handle privacy policy tap
-                                      },
-                                  ),
-                                  const TextSpan(text: '.'),
-                                ],
+                  child: Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustomFormField(
+                          controller: _nameController,
+                          label: 'Name',
+                          icon: Icons.person,
+                          validator: _validateName,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 16),
+                        CustomFormField(
+                          controller: _emailController,
+                          label: 'Email',
+                          keyboardType: TextInputType.emailAddress,
+                          icon: Icons.email,
+                          validator: _validateEmail,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 16),
+                        CustomFormField(
+                          controller: _passwordController,
+                          isPassword: true,
+                          label: 'Password',
+                          keyboardType: TextInputType.text,
+                          icon: Icons.lock,
+                          suffixIcon: Icons.visibility_off,
+                          validator: _validatePassword,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 16),
+                        CustomFormField(
+                          controller: _confirmPasswordController,
+                          isPassword: true,
+                          label: 'Confirm Password',
+                          keyboardType: TextInputType.text,
+                          icon: Icons.lock,
+                          suffixIcon: Icons.visibility_off,
+                          validator: _validateConfirmPassword,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: CustomFormField(
+                                controller: _countryCodeController,
+                                keyboardType: TextInputType.number,
+                                icon: Icons.phone,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                validator: _validateCountryCode,
+                                onChanged: (_) => setState(() {}),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      SizedBox(
-                        width: double.infinity,
-                        child: CustomButton(
-                          onPressed: () {
-                            // Handle sign up logic
-                          },
-                          text: 'Send Verification Code',
+                            const SizedBox(width: 8),
+                            Expanded(
+                              flex: 2,
+                              child: CustomFormField(
+                                controller: _phoneController,
+                                label: 'Phone Number',
+                                keyboardType: TextInputType.phone,
+                                validator: _validatePhoneNumber,
+                                onChanged: (_) => setState(() {}),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Already have an account?'),
-                          CustomTextButton(
+                        const SizedBox(height: 16),
+                        HomeAreaDropdown(
+                          onAreaSelected: (area) {
+                            setState(() => _neighborhood = area);
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: isTermsAccepted,
+                              onChanged: (value) {
+                                setState(() {
+                                  isTermsAccepted = value ?? false;
+                                });
+                              },
+                            ),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  text:
+                                      'I confirm I am the legal guardian and agree to the ',
+                                  style: AppTextStyles.body,
+                                  children: [
+                                    TextSpan(
+                                      text: 'Terms',
+                                      style: AppTextStyles.body.copyWith(
+                                        color: AppColorsLight.primary,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // Handle terms and conditions tap
+                                        },
+                                    ),
+                                    const TextSpan(text: ' and '),
+                                    TextSpan(
+                                      text: 'Privacy Policy',
+                                      style: AppTextStyles.body.copyWith(
+                                        color: AppColorsLight.primary,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // Handle privacy policy tap
+                                        },
+                                    ),
+                                    const TextSpan(text: '.'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        SizedBox(
+                          width: double.infinity,
+                          child: CustomButton(
+                            backgroundColor: _canEnableButton()
+                                ? AppColorsLight.primary
+                                : AppColorsLight.primary.withValues(alpha: 0.5),
                             onPressed: () {
-                              // Navigate to login screen
+                              final isFormValid =
+                                  _formKey.currentState?.validate() == true;
+
+                              if (!isFormValid) return;
+
+                              if (!isTermsAccepted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'You must accept the terms and conditions',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_neighborhood.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please select a neighborhood',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              _submit();
                             },
-                            text: 'Log In',
+                            text: 'Send Verification Code',
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Already have an account?'),
+                            CustomTextButton(
+                              onPressed: () {
+                                // Navigate to login screen
+                              },
+                              text: 'Log In',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
       ),
     );
+  }
+
+  bool _isValidName(String name) {
+    return name.trim().isNotEmpty;
+  }
+
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _isValidPassword(String password) {
+    return password.length >= 6;
+  }
+
+  bool _doPasswordsMatch(String password, String confirmPassword) {
+    return password == confirmPassword;
+  }
+
+  bool _isValidPhoneNumber(String phone) {
+    final phoneRegex = RegExp(r'^\d{10}$');
+    return phoneRegex.hasMatch(phone);
+  }
+
+  bool _isValidCountryCode(String code) {
+    final countryCodeRegex = RegExp(r'^\+\d{1,3}$');
+    return countryCodeRegex.hasMatch(code);
+  }
+
+  String? _validateName(String? value) {
+    if (!_isValidName(value ?? '')) {
+      return 'Please enter a valid name';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (!_isValidEmail(value ?? '')) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (!_isValidPassword(value ?? '')) {
+      return 'Password must be at least 6 characters long';
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    if (!_doPasswordsMatch(_passwordController.text, value ?? '')) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  String? _validatePhoneNumber(String? value) {
+    if (!_isValidPhoneNumber(value ?? '')) {
+      return 'Please enter a valid 10-digit phone number';
+    }
+    return null;
+  }
+
+  String? _validateCountryCode(String? value) {
+    if (!_isValidCountryCode(value ?? '')) {
+      return 'Please enter a valid country code (e.g., +30)';
+    }
+    return null;
+  }
+
+  bool _canEnableButton() {
+    return _isValidName(_nameController.text) &&
+        _isValidEmail(_emailController.text) &&
+        _isValidPassword(_passwordController.text) &&
+        _doPasswordsMatch(
+          _passwordController.text,
+          _confirmPasswordController.text,
+        ) &&
+        _isValidPhoneNumber(_phoneController.text) &&
+        _isValidCountryCode(_countryCodeController.text) &&
+        isTermsAccepted &&
+        _neighborhood.isNotEmpty;
+  }
+
+  void _submit() async {
+    final fullPhoneNumber =
+        '${_countryCodeController.text}${_phoneController.text}';
+
+    try {
+      await ref
+          .read(authProvider.notifier)
+          .signUp(
+            name: _nameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+            phone: fullPhoneNumber,
+            neighborhood: _neighborhood,
+          );
+
+      if (!mounted) return;
+
+      final authState = ref.read(authProvider);
+
+      if (authState.error != null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${authState.error}')));
+        return;
+      }
+
+      context.goNamed('otp', queryParameters: {'phone': fullPhoneNumber});
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An unexpected error occured: $e')),
+      );
+    }
   }
 }

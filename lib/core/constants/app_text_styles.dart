@@ -5,10 +5,11 @@ class AppTextStyles {
   AppTextStyles._();
 
   static const TextStyle headline1 = TextStyle(
-    fontSize: 32,
+    fontSize: 16,
+    color: AppColorsLight.textSecondary,
     fontWeight: FontWeight.w700,
     height: 1.2,
-    letterSpacing: -0.5,
+    letterSpacing: 0.8,
   );
 
   static const TextStyle title = TextStyle(

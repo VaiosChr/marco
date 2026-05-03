@@ -41,7 +41,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
     // ----- Auth guard -----
     redirect: (context, state) {
-      final isAuthenticated = ref.watch(authProvider).isAuthenticated;
+      final isAuthenticated = ref.read(authProvider).isAuthenticated;
       final isOnAuthFlow =
           state.matchedLocation == AppRoutes.signup ||
           state.matchedLocation == AppRoutes.otp;

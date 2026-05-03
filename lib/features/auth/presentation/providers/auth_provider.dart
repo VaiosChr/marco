@@ -57,4 +57,33 @@ class Auth extends _$Auth {
       state = state.copyWith(parent: parent, isAuthenticated: true);
     }
   }
+
+  Future<void> signUp({
+    required String name,
+    required String email,
+    required String password,
+    required String phone,
+    required String neighborhood,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final parent = await repo.signUp(
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+        neighborhood: neighborhood,
+      );
+
+      state = state.copyWith(
+        parent: parent,
+        isAuthenticated: false,
+        isLoading: false,
+      );
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
 }

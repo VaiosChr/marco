@@ -6,6 +6,9 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Verify Phone')),
+      body: Center(child: Text('OTP sent to $phoneNumber')),
+    );
   }
 }

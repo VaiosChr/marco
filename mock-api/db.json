@@ -11,7 +11,6 @@
       "createdAt": "2026-01-01T10:00:00Z"
     }
   ],
-
   "sessions": [
     {
       "id": "s1",
@@ -21,9 +20,7 @@
       "expiresAt": "2026-12-31T23:59:59Z"
     }
   ],
-
   "otp_requests": [],
-
   "children": [
     {
       "id": "c1",
@@ -42,7 +39,6 @@
       "createdAt": "2026-01-01T10:05:00Z"
     }
   ],
-
   "routes": [
     {
       "id": "r1",
@@ -60,13 +56,18 @@
         "label": "3rd Primary School of Kalamaria"
       },
       "waypoints": [
-        { "lat": 40.5835, "lng": 22.9490 },
-        { "lat": 40.5857, "lng": 22.9501 }
+        {
+          "lat": 40.5835,
+          "lng": 22.949
+        },
+        {
+          "lat": 40.5857,
+          "lng": 22.9501
+        }
       ],
       "createdAt": "2026-01-02T08:00:00Z"
     }
   ],
-
   "route_status": [
     {
       "id": "rs1",
@@ -78,7 +79,6 @@
       "updatedAt": "2026-04-30T08:00:00Z"
     }
   ],
-
   "ai_suggestions": [
     {
       "id": "as1",
@@ -88,10 +88,22 @@
       "alternativeRoute": {
         "name": "Park Route",
         "waypoints": [
-          { "lat": 40.5830, "lng": 22.9480 },
-          { "lat": 40.5845, "lng": 22.9470 },
-          { "lat": 40.5870, "lng": 22.9490 },
-          { "lat": 40.5891, "lng": 22.9512 }
+          {
+            "lat": 40.583,
+            "lng": 22.948
+          },
+          {
+            "lat": 40.5845,
+            "lng": 22.947
+          },
+          {
+            "lat": 40.587,
+            "lng": 22.949
+          },
+          {
+            "lat": 40.5891,
+            "lng": 22.9512
+          }
         ],
         "estimatedMinutes": 18,
         "safety": 9.1,
@@ -101,9 +113,7 @@
       "createdAt": "2026-04-30T08:01:00Z"
     }
   ],
-
   "suggestion_feedback": [],
-
   "trip_logs": [
     {
       "id": "tl1",
@@ -117,7 +127,6 @@
       "createdAt": "2026-04-29T09:00:00Z"
     }
   ],
-
   "rewards": [
     {
       "id": "rw1",
@@ -162,7 +171,6 @@
       "updatedAt": "2026-04-29T09:00:00Z"
     }
   ],
-
   "kid_profiles": [
     {
       "id": "kp1",
@@ -178,10 +186,24 @@
         "status": "CAUTION",
         "tip": "The air is a little smoky today. Try breathing through your nose! 👃"
       },
-      "recentMoods": ["happy", "neutral", "happy", "happy", "excited"],
+      "recentMoods": [
+        "happy",
+        "neutral",
+        "happy",
+        "happy",
+        "excited"
+      ],
       "badges": [
-        { "id": "kb1", "name": "Explorer", "icon": "🗺️" },
-        { "id": "kb2", "name": "Sunshine Walker", "icon": "☀️" }
+        {
+          "id": "kb1",
+          "name": "Explorer",
+          "icon": "🗺️"
+        },
+        {
+          "id": "kb2",
+          "name": "Sunshine Walker",
+          "icon": "☀️"
+        }
       ]
     }
   ]

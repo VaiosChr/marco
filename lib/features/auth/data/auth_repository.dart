@@ -23,6 +23,7 @@ class AuthRepository {
         'password': password,
         'phoneNumber': phone,
         'neighborhood': neighborhood,
+        'isGuardianConfirmed': true,
       },
     );
     final parent = ParentModel(
