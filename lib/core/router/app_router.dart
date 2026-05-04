@@ -33,8 +33,6 @@ abstract class AppRoutes {
 // Router provider — depends on auth state so redirects are reactive
 // ---------------------------------------------------------------------------
 final appRouterProvider = Provider<GoRouter>((ref) {
-  // final authState = ref.watch(authStateProvider);
-
   return GoRouter(
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,

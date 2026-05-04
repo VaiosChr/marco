@@ -86,4 +86,12 @@ class Auth extends _$Auth {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
+
+  Future<bool> verifyOtp({required String phone, required String code}) async {
+    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isAuthenticated: true);
+    state = state.copyWith(isLoading: false);
+
+    return true;
+  }
 }

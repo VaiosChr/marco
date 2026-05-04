@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
+import 'package:marco/core/utils/scaffold_message.dart';
 import 'package:marco/features/auth/presentation/providers/auth_provider.dart';
 import 'package:marco/features/auth/presentation/widgets/custom_form_field.dart';
 import 'package:marco/features/auth/presentation/widgets/home_area.dart';
@@ -47,17 +48,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Column(
-            children: [
-              Text('Sign Up', style: AppTextStyles.title),
-              // const SizedBox(height: 4),
-              const Text(
-                'Step 1 of 3 - Create Your Account',
-                style: AppTextStyles.headline1,
-              ),
-            ],
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Sign Up', style: AppTextStyles.title),
+            const Text(
+              'Step 1 of 3: Create Your Account',
+              style: AppTextStyles.headline1,
+            ),
+          ],
         ),
       ),
       body: Center(
@@ -204,23 +203,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               if (!isFormValid) return;
 
                               if (!isTermsAccepted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'You must accept the terms and conditions',
-                                    ),
-                                  ),
+                                showScaffoldMessage(
+                                  context,
+                                  'You must accept the terms and conditions',
                                 );
                                 return;
                               }
 
                               if (_neighborhood.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Please select a neighborhood',
-                                    ),
-                                  ),
+                                showScaffoldMessage(
+                                  context,
+                                  'Please select a neighborhood',
                                 );
                                 return;
                               }
@@ -357,17 +350,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       final authState = ref.read(authProvider);
 
       if (authState.error != null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${authState.error}')));
+        showScaffoldMessage(context, 'Error: ${authState.error}');
         return;
       }
 
-      context.goNamed('otp', queryParameters: {'phone': fullPhoneNumber});
+      context.pushNamed('otp', queryParameters: {'phone': fullPhoneNumber});
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An unexpected error occured: $e')),
-      );
+      showScaffoldMessage(context, 'An unexpected error occurred: $e');
     }
   }
 }
