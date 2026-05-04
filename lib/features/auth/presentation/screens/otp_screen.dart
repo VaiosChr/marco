@@ -111,14 +111,16 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   final isValid = await ref
                       .read(authProvider.notifier)
                       .verifyOtp(phone: widget.phoneNumber, code: otp);
-                  if (!isValid) {
+                  if (!isValid && mounted) {
                     showScaffoldMessage(
                       context,
                       'Invalid OTP. Please try again.',
                     );
                     return;
                   }
-                  context.pushReplacementNamed('addChild');
+                  if (mounted) {
+                    context.pushReplacementNamed('addChild');
+                  }
                 } else {
                   showScaffoldMessage(
                     context,

@@ -10,6 +10,7 @@ class MarcoApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'MARCO',
       routerConfig: router,
       theme: ThemeData(

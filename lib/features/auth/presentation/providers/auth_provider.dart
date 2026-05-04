@@ -46,15 +46,20 @@ class AuthState {
 class Auth extends _$Auth {
   @override
   AuthState build() {
+    state = const AuthState(isLoading: true);
     _loadSession();
-    return const AuthState();
+    state = state.copyWith(isLoading: false);
+    return state;
   }
 
   Future<void> _loadSession() async {
     final repo = ref.read(authRepositoryProvider);
     final parent = await repo.getStoredSession();
+
     if (parent != null) {
       state = state.copyWith(parent: parent, isAuthenticated: true);
+
+      return;
     }
   }
 

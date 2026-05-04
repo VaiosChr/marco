@@ -41,6 +41,7 @@ class AuthRepository {
 
   Future<bool> verifyOtp(String phone, String code) async {
     if (code.length == 6) return true;
+
     return false;
   }
 

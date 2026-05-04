@@ -6,8 +6,13 @@ import 'package:marco/shared/widgets/custom_container.dart';
 
 class ParentalConsent extends ConsumerStatefulWidget {
   final ConsentModel consent;
+  final ValueChanged<ConsentModel>? onConsentChanged;
 
-  const ParentalConsent({super.key, required this.consent});
+  const ParentalConsent({
+    super.key,
+    required this.consent,
+    this.onConsentChanged,
+  });
 
   @override
   ConsumerState<ParentalConsent> createState() => _ParentalConsentState();
@@ -33,6 +38,7 @@ class _ParentalConsentState extends ConsumerState<ParentalConsent> {
                   setState(() {
                     widget.consent.processingRoutes = value ?? false;
                   });
+                  widget.onConsentChanged?.call(widget.consent);
                 },
               ),
               Expanded(
@@ -40,6 +46,10 @@ class _ParentalConsentState extends ConsumerState<ParentalConsent> {
                   "I consent to processing my child's anonymized route data.",
                   style: AppTextStyles.body,
                 ),
+              ),
+              const Text(
+                '*',
+                style: TextStyle(color: Colors.red, fontSize: 16),
               ),
             ],
           ),
@@ -54,6 +64,7 @@ class _ParentalConsentState extends ConsumerState<ParentalConsent> {
                   setState(() {
                     widget.consent.aiSuggestions = value ?? false;
                   });
+                  widget.onConsentChanged?.call(widget.consent);
                 },
               ),
               Expanded(
@@ -61,6 +72,10 @@ class _ParentalConsentState extends ConsumerState<ParentalConsent> {
                   'I consent to AI-powered route suggestions for my child.',
                   style: AppTextStyles.body,
                 ),
+              ),
+              const Text(
+                '*',
+                style: TextStyle(color: Colors.red, fontSize: 16),
               ),
             ],
           ),
@@ -75,16 +90,20 @@ class _ParentalConsentState extends ConsumerState<ParentalConsent> {
                   setState(() {
                     widget.consent.shareData = value ?? false;
                   });
+                  widget.onConsentChanged?.call(widget.consent);
                 },
               ),
+
               Expanded(
                 child: Text(
-                  'Optional: share aggregated data with the municipality.',
+                  'Share aggregated data with the municipality.',
                   style: AppTextStyles.body,
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 2),
+          Text('* Required', style: TextStyle(color: Colors.red, fontSize: 12)),
         ],
       ),
     );

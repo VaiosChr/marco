@@ -147,6 +147,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         Row(
                           children: [
                             Checkbox(
+                              side: BorderSide(width: 1),
                               value: isTermsAccepted,
                               onChanged: (value) {
                                 setState(() {

@@ -5,7 +5,7 @@ class AppTextStyles {
   AppTextStyles._();
 
   static const TextStyle headline1 = TextStyle(
-    fontSize: 16,
+    fontSize: 14,
     color: AppColorsLight.textSecondary,
     fontWeight: FontWeight.w700,
     height: 1.2,

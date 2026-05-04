@@ -6,6 +6,9 @@ class RouteEntryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Route Entry')),
+      body: Center(child: Text('Starting route for child ID: $childId')),
+    );
   }
 }
