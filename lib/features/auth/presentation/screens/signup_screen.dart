@@ -6,7 +6,7 @@ import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
 import 'package:marco/core/utils/scaffold_message.dart';
 import 'package:marco/features/auth/presentation/providers/auth_provider.dart';
-import 'package:marco/features/auth/presentation/widgets/custom_form_field.dart';
+import 'package:marco/shared/widgets/custom_form_field.dart';
 import 'package:marco/features/auth/presentation/widgets/home_area.dart';
 import 'package:marco/shared/widgets/custom_buttons.dart';
 
@@ -195,7 +195,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           child: CustomButton(
                             backgroundColor: _canEnableButton()
                                 ? AppColorsLight.primary
-                                : AppColorsLight.primary.withValues(alpha: 0.5),
+                                : AppColorsLight.primary.withAlpha(50),
                             onPressed: () {
                               final isFormValid =
                                   _formKey.currentState?.validate() == true;

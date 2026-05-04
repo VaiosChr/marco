@@ -46,7 +46,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // Not logged in and trying to reach a protected screen → signup
       if (!isAuthenticated && !isOnAuthFlow) {
-        return AppRoutes.signup;
+        // return AppRoutes.signup;
+        return AppRoutes.addChild; // TEMP: skip auth for easier testing
       }
 
       // Already logged in and landing on auth screens → go home

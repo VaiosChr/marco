@@ -102,7 +102,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       child: CustomButton(
         backgroundColor: isOtpComplete
             ? AppColorsLight.primary
-            : AppColorsLight.primary.withValues(alpha: 0.5),
+            : AppColorsLight.primary.withAlpha(50),
         onPressed: isOtpComplete
             ? () async {
                 String otp = _otpControllers.map((c) => c.text).join();
