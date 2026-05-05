@@ -17,11 +17,11 @@ class CustomFormField extends StatefulWidget {
   const CustomFormField({
     super.key,
     required this.controller,
+    required this.label,
     this.isPassword = false,
     this.onChanged,
     this.validator,
     this.onPrefixPressed,
-    this.label = 'Phone Number',
     this.keyboardType = TextInputType.text,
     this.icon,
     this.suffixIcon,

@@ -110,6 +110,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                             Expanded(
                               flex: 1,
                               child: CustomFormField(
+                                label: '',
                                 controller: _countryCodeController,
                                 keyboardType: TextInputType.number,
                                 icon: Icons.phone,

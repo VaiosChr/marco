@@ -115,6 +115,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             Expanded(
                               flex: 1,
                               child: CustomFormField(
+                                label: '',
                                 controller: _countryCodeController,
                                 keyboardType: TextInputType.number,
                                 icon: Icons.phone,

@@ -13,7 +13,6 @@ import '../../features/route/presentation/screens/live_status_screen.dart';
 import '../../features/ai_suggestion/presentation/screens/ai_suggestion_screen.dart';
 import '../../features/trip_log/presentation/screens/trip_log_screen.dart';
 import '../../features/rewards/presentation/screens/rewards_screen.dart';
-import '../../features/kid_view/presentation/screens/kid_home_screen.dart';
 
 // ---------------------------------------------------------------------------
 // Route name constants
@@ -116,63 +115,65 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      ShellRoute(
-        builder: (context, state, child) {
-          return ScaffoldWithNavBar(child: child);
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return ScaffoldWithNavBar(navigationShell: navigationShell);
         },
-        routes: [
-          // ── Screen 4: Route entry (map) ───────────────────────────────
-          GoRoute(
-            path: AppRoutes.routeEntry,
-            name: 'routeEntry',
-            builder: (context, state) => RouteEntryScreen(),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              // ── Screen 4: Route entry (map) ───────────────────────────
+              GoRoute(
+                path: AppRoutes.routeEntry,
+                name: 'routeEntry',
+                builder: (context, state) => RouteEntryScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'live-status',
+                    name: 'liveStatus',
+                    builder: (context, state) => LiveStatusScreen(
+                      routeId: state.uri.queryParameters['routeId'] ?? '',
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'ai-suggestion',
+                    name: 'aiSuggestion',
+                    builder: (context, state) => AiSuggestionScreen(
+                      routeId: state.uri.queryParameters['routeId'] ?? '',
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-
-          // ── Screen 5: Live route status ───────────────────────────────
-          GoRoute(
-            path: AppRoutes.liveStatus,
-            name: 'liveStatus',
-            builder: (context, state) => LiveStatusScreen(
-              routeId: state.uri.queryParameters['routeId'] ?? '',
-            ),
+          StatefulShellBranch(
+            routes: [
+              // ── Screen 8: Rewards ─────────────────────────────────────
+              GoRoute(
+                path: AppRoutes.rewards,
+                name: 'rewards',
+                builder: (context, state) => const RewardsScreen(),
+              ),
+            ],
           ),
-
-          // ── Screen 6: AI suggestion ───────────────────────────────────
-          GoRoute(
-            path: AppRoutes.aiSuggestion,
-            name: 'aiSuggestion',
-            builder: (context, state) => AiSuggestionScreen(
-              routeId: state.uri.queryParameters['routeId'] ?? '',
-            ),
+          StatefulShellBranch(
+            routes: [
+              // ── Screen 7: Manual trip log ─────────────────────────────
+              GoRoute(
+                path: AppRoutes.tripLog,
+                name: 'tripLog',
+                builder: (context, state) => const TripLogScreen(),
+              ),
+            ],
           ),
-
-          // ── Screen 7: Manual trip log ─────────────────────────────────
-          GoRoute(
-            path: AppRoutes.tripLog,
-            name: 'tripLog',
-            builder: (context, state) => const TripLogScreen(),
-          ),
-
-          // ── Screen 8: Rewards ─────────────────────────────────────────
-          GoRoute(
-            path: AppRoutes.rewards,
-            name: 'rewards',
-            builder: (context, state) => const RewardsScreen(),
-          ),
-
-          // ── Screen 9 (bonus): Kid view ────────────────────────────────
-          GoRoute(
-            path: AppRoutes.kidView,
-            name: 'kidView',
-            builder: (context, state) => KidHomeScreen(
-              childId: state.uri.queryParameters['childId'] ?? '',
-            ),
-          ),
-
-          GoRoute(
-            path: AppRoutes.settings,
-            name: 'settings',
-            builder: (context, state) => const SettingsScreen(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.settings,
+                name: 'settings',
+                builder: (context, state) => const SettingsScreen(),
+              ),
+            ],
           ),
         ],
       ),
