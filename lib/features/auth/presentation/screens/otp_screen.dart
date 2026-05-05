@@ -12,9 +12,20 @@ import 'package:marco/features/auth/presentation/widgets/phone_info.dart';
 import 'package:marco/shared/widgets/custom_buttons.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
+  final String name;
+  final String email;
+  final String password;
   final String phoneNumber;
+  final String neighborhood;
 
-  const OtpScreen({super.key, required this.phoneNumber});
+  const OtpScreen({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.phoneNumber,
+    required this.neighborhood,
+  });
 
   @override
   ConsumerState<OtpScreen> createState() => _OtpScreenState();
@@ -106,27 +117,20 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         onPressed: isOtpComplete
             ? () async {
                 String otp = _otpControllers.map((c) => c.text).join();
-                if (otp.length == 6) {
-                  if (!mounted) return;
-                  final isValid = await ref
-                      .read(authProvider.notifier)
-                      .verifyOtp(phone: widget.phoneNumber, code: otp);
-                  if (!isValid && mounted) {
-                    showScaffoldMessage(
-                      context,
-                      'Invalid OTP. Please try again.',
-                    );
-                    return;
-                  }
-                  if (mounted) {
-                    context.pushReplacementNamed('addChild');
-                  }
-                } else {
+
+                final isValid = ref
+                    .read(authProvider.notifier)
+                    .verifyOtp(phone: widget.phoneNumber, code: otp);
+
+                if (!isValid && mounted) {
                   showScaffoldMessage(
                     context,
-                    'Please enter the complete 6-digit OTP.',
+                    'Invalid OTP. Please try again.',
                   );
+                  return;
                 }
+
+                _submit();
               }
             : () {
                 showScaffoldMessage(
@@ -192,5 +196,32 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         ),
       ),
     );
+  }
+
+  void _submit() async {
+    try {
+      await ref
+          .read(authProvider.notifier)
+          .signUp(
+            name: widget.name,
+            email: widget.email,
+            password: widget.password,
+            phone: widget.phoneNumber,
+            neighborhood: widget.neighborhood,
+          );
+
+      if (!mounted) return;
+
+      final authState = ref.read(authProvider);
+
+      if (authState.error != null) {
+        showScaffoldMessage(context, authState.error!);
+        return;
+      }
+
+      context.pushNamed('addChild');
+    } catch (e) {
+      showScaffoldMessage(context, 'An error occurred: $e');
+    }
   }
 }

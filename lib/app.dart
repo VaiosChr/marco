@@ -24,6 +24,7 @@ class MarcoApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Marco',
       theme: lightTheme,
       darkTheme: darkTheme,

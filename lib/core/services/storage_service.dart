@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marco/features/auth/domain/models/parent_model.dart';
+import 'package:marco/features/child/domain/models/child_model.dart';
+import 'package:marco/features/child/domain/models/consent_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -12,43 +14,103 @@ class StorageService {
       'auth.session.isGuardianConfirmed';
 
   Future<void> saveSession(ParentModel parent) async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setString(_idKey, parent.id);
-    await preferences.setString(_nameKey, parent.name);
-    await preferences.setString(_emailKey, parent.email);
-    await preferences.setString(_phoneKey, parent.phoneNumber);
-    await preferences.setString(_neighborhoodKey, parent.neighborhood);
-    await preferences.setBool(
-      _guardianConfirmedKey,
-      parent.isGuardianConfirmed,
-    );
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_idKey, parent.id);
+    await prefs.setString(_nameKey, parent.name);
+    await prefs.setString(_emailKey, parent.email);
+    await prefs.setString(_phoneKey, parent.phoneNumber);
+    await prefs.setString(_neighborhoodKey, parent.neighborhood);
+    await prefs.setBool(_guardianConfirmedKey, parent.isGuardianConfirmed);
   }
 
   Future<ParentModel?> getSession() async {
-    final preferences = await SharedPreferences.getInstance();
-    final id = preferences.getString(_idKey);
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getString(_idKey);
     if (id == null || id.isEmpty) {
       return null;
     }
 
     return ParentModel(
       id: id,
-      name: preferences.getString(_nameKey) ?? '',
-      email: preferences.getString(_emailKey) ?? '',
-      phoneNumber: preferences.getString(_phoneKey) ?? '',
-      neighborhood: preferences.getString(_neighborhoodKey) ?? '',
-      isGuardianConfirmed: preferences.getBool(_guardianConfirmedKey) ?? false,
+      name: prefs.getString(_nameKey) ?? '',
+      email: prefs.getString(_emailKey) ?? '',
+      phoneNumber: prefs.getString(_phoneKey) ?? '',
+      neighborhood: prefs.getString(_neighborhoodKey) ?? '',
+      isGuardianConfirmed: prefs.getBool(_guardianConfirmedKey) ?? false,
+    );
+  }
+
+  Future<void> saveChild(ChildModel child) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('child.session.id', child.id);
+    await prefs.setString('child.session.name', child.name);
+    await prefs.setInt('child.session.age', child.age);
+    await prefs.setString('child.session.school', child.school);
+    await prefs.setString('child.session.phone', child.phone);
+    if (child.coParentPhone != null) {
+      await prefs.setString(
+        'child.session.coParentPhone',
+        child.coParentPhone!,
+      );
+    }
+    if (child.coParentEmail != null) {
+      await prefs.setString(
+        'child.session.coParentEmail',
+        child.coParentEmail!,
+      );
+    }
+    await prefs.setBool(
+      'child.session.processingRoutes',
+      child.consents.processingRoutes,
+    );
+    await prefs.setBool(
+      'child.session.aiSuggestions',
+      child.consents.aiSuggestions,
+    );
+    await prefs.setBool('child.session.shareData', child.consents.shareData);
+    await prefs.setString(
+      'child.session.createdAt',
+      child.createdAt.toIso8601String(),
+    );
+  }
+
+  Future<ChildModel> getChildSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getString('child.session.id');
+    if (id == null || id.isEmpty) {
+      throw Exception('No child session found');
+    }
+
+    return ChildModel(
+      id: id,
+      parentId: prefs.getString(_idKey) ?? '',
+      name: prefs.getString('child.session.name') ?? '',
+      age: prefs.getInt('child.session.age') ?? 0,
+      school: prefs.getString('child.session.school') ?? '',
+      phone: prefs.getString('child.session.phone') ?? '',
+      coParentPhone: prefs.getString('child.session.coParentPhone'),
+      coParentEmail: prefs.getString('child.session.coParentEmail'),
+      consents: ConsentModel(
+        processingRoutes:
+            prefs.getBool('child.session.processingRoutes') ?? false,
+        aiSuggestions: prefs.getBool('child.session.aiSuggestions') ?? false,
+        shareData: prefs.getBool('child.session.shareData') ?? false,
+      ),
+      createdAt: DateTime.parse(
+        prefs.getString('child.session.createdAt') ??
+            DateTime.now().toIso8601String(),
+      ),
     );
   }
 
   Future<void> clearSession() async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.remove(_idKey);
-    await preferences.remove(_nameKey);
-    await preferences.remove(_emailKey);
-    await preferences.remove(_phoneKey);
-    await preferences.remove(_neighborhoodKey);
-    await preferences.remove(_guardianConfirmedKey);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_idKey);
+    await prefs.remove(_nameKey);
+    await prefs.remove(_emailKey);
+    await prefs.remove(_phoneKey);
+    await prefs.remove(_neighborhoodKey);
+    await prefs.remove(_guardianConfirmedKey);
   }
 }
 

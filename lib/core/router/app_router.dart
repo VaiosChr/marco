@@ -91,8 +91,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.otp,
         name: 'otp',
         builder: (context, state) {
+          final name = state.uri.queryParameters['name'] ?? '';
+          final email = state.uri.queryParameters['email'] ?? '';
+          final password = state.uri.queryParameters['password'] ?? '';
           final phone = state.uri.queryParameters['phone'] ?? '';
-          return OtpScreen(phoneNumber: phone);
+          final neighborhood = state.uri.queryParameters['neighborhood'] ?? '';
+          return OtpScreen(
+            name: name,
+            email: email,
+            password: password,
+            phoneNumber: phone,
+            neighborhood: neighborhood,
+          );
         },
       ),
 
@@ -115,9 +125,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.routeEntry,
             name: 'routeEntry',
-            builder: (context, state) => RouteEntryScreen(
-              childId: state.uri.queryParameters['childId'] ?? '',
-            ),
+            builder: (context, state) => RouteEntryScreen(),
           ),
 
           // ── Screen 5: Live route status ───────────────────────────────

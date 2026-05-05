@@ -331,31 +331,18 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         _neighborhood.isNotEmpty;
   }
 
-  void _submit() async {
-    final fullPhoneNumber =
-        '${_countryCodeController.text}${_phoneController.text}';
-
+  void _submit() {
     try {
-      await ref
-          .read(authProvider.notifier)
-          .signUp(
-            name: _nameController.text.trim(),
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-            phone: fullPhoneNumber,
-            neighborhood: _neighborhood,
-          );
-
-      if (!mounted) return;
-
-      final authState = ref.read(authProvider);
-
-      if (authState.error != null) {
-        showScaffoldMessage(context, 'Error: ${authState.error}');
-        return;
-      }
-
-      context.pushNamed('otp', queryParameters: {'phone': fullPhoneNumber});
+      context.pushNamed(
+        'otp',
+        queryParameters: {
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text,
+          'phone': '${_countryCodeController.text}${_phoneController.text}',
+          'neighborhood': _neighborhood,
+        },
+      );
     } catch (e) {
       showScaffoldMessage(context, 'An unexpected error occurred: $e');
     }

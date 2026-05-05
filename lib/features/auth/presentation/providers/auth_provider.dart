@@ -1,11 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marco/core/services/mock_api_service.dart';
 import 'package:marco/core/services/storage_service.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:marco/features/auth/data/auth_repository.dart';
 import 'package:marco/features/auth/domain/models/parent_model.dart';
-
-part 'auth_provider.g.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
@@ -42,8 +39,11 @@ class AuthState {
   }
 }
 
-@riverpod
-class Auth extends _$Auth {
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);
+
+class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() {
     state = const AuthState(isLoading: true);
@@ -58,9 +58,13 @@ class Auth extends _$Auth {
 
     if (parent != null) {
       state = state.copyWith(parent: parent, isAuthenticated: true);
-
-      return;
     }
+  }
+
+  Future<void> signOut() async {
+    final repo = ref.read(authRepositoryProvider);
+    await repo.signOut();
+    state = const AuthState();
   }
 
   Future<void> signUp({
@@ -84,7 +88,7 @@ class Auth extends _$Auth {
 
       state = state.copyWith(
         parent: parent,
-        isAuthenticated: false,
+        isAuthenticated: true,
         isLoading: false,
       );
     } catch (e) {
@@ -92,11 +96,7 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<bool> verifyOtp({required String phone, required String code}) async {
-    state = state.copyWith(isLoading: true, error: null);
-    state = state.copyWith(isAuthenticated: true);
-    state = state.copyWith(isLoading: false);
-
+  bool verifyOtp({required String phone, required String code}) {
     return true;
   }
 }

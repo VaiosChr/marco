@@ -9,6 +9,15 @@
       "neighborhood": "Kalamaria",
       "isLegalGuardian": true,
       "createdAt": "2026-01-01T10:00:00Z"
+    },
+    {
+      "name": "va",
+      "email": "va@gm.cco",
+      "password": "asdfasdf",
+      "phoneNumber": "+306912346578",
+      "neighborhood": "Dendropotamos",
+      "isGuardianConfirmed": true,
+      "id": "6cZ_P2y"
     }
   ],
   "sessions": [
@@ -37,6 +46,22 @@
         "municipalityDataSharing": false
       },
       "createdAt": "2026-01-01T10:05:00Z"
+    },
+    {
+      "parentId": "6cZ_P2y",
+      "name": "Maria",
+      "age": 4,
+      "school": "4th Primary School",
+      "phone": "+301234567890",
+      "coParentPhone": null,
+      "coParentEmail": null,
+      "consents": {
+        "anonymizedRouteData": true,
+        "aiRouteSuggestions": true,
+        "municipalityDataSharing": false
+      },
+      "createdAt": "2026-05-05T12:41:48.058225",
+      "id": "GjaZBN9"
     }
   ],
   "routes": [

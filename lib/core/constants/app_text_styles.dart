@@ -12,6 +12,14 @@ class AppTextStyles {
     letterSpacing: 0.8,
   );
 
+  static const TextStyle headline2 = TextStyle(
+    fontSize: 18,
+    color: AppColorsLight.textSecondary,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    letterSpacing: 0.8,
+  );
+
   static const TextStyle title = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w800,

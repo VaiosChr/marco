@@ -1,11 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marco/core/services/mock_api_service.dart';
+import 'package:marco/core/services/storage_service.dart';
 import 'package:marco/features/child/data/child_repository.dart';
 import 'package:marco/features/child/domain/models/child_model.dart';
 import 'package:marco/features/child/domain/models/consent_model.dart';
 
 final childRepositoryProvider = Provider<ChildRepository>((ref) {
-  return ChildRepository(ref.read(mockApiServiceProvider));
+  return ChildRepository(
+    ref.read(mockApiServiceProvider),
+    ref.read(storageServiceProvider),
+  );
 });
 
 class ChildState {
@@ -30,7 +34,12 @@ final childProvider = NotifierProvider<ChildNotifier, ChildState>(
 
 class ChildNotifier extends Notifier<ChildState> {
   @override
-  ChildState build() => const ChildState();
+  ChildState build() {
+    state = const ChildState(isLoading: true);
+    _loadStoredChild();
+    state = state.copyWith(isLoading: false);
+    return state;
+  }
 
   Future<ChildModel?> createChild({
     required String parentId,
@@ -62,6 +71,15 @@ class ChildNotifier extends Notifier<ChildState> {
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
       return null;
+    }
+  }
+
+  Future<void> _loadStoredChild() async {
+    final repo = ref.read(childRepositoryProvider);
+    final child = await repo.getStoredChild();
+
+    if (child != null) {
+      state = state.copyWith(child: child);
     }
   }
 }

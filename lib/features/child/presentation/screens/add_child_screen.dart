@@ -265,18 +265,14 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
       return;
     }
 
-    final fullPhoneNumber =
-        '${_countryCodeController.text}${_phoneController.text}';
-    final age = int.parse(_ageController.text);
-
     final child = await ref
         .read(childProvider.notifier)
         .createChild(
           parentId: authState.parent!.id,
           name: _nameController.text.trim(),
-          age: age,
+          age: int.parse(_ageController.text),
           school: _schoolController.text.trim(),
-          phone: fullPhoneNumber,
+          phone: '${_countryCodeController.text}${_phoneController.text}',
           consents: _consentModel,
         );
 
@@ -290,9 +286,6 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
       return;
     }
 
-    context.pushReplacementNamed(
-      'routeEntry',
-      queryParameters: {'childId': child.id},
-    );
+    context.pushReplacementNamed('rewards');
   }
 }

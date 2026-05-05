@@ -3,16 +3,23 @@ import 'package:marco/core/constants/app_colors.dart';
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
+  colorScheme: ColorScheme.fromSeed(seedColor: AppColorsLight.primary),
   primaryColor: AppColorsLight.primary,
   scaffoldBackgroundColor: AppColorsLight.scaffoldBackground,
-  appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
+  canvasColor: Colors.white,
+  appBarTheme: AppBarTheme(backgroundColor: Colors.white),
 );
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: AppColorsDark.primary,
+    brightness: Brightness.dark,
+  ),
   primaryColor: AppColorsDark.primary,
   scaffoldBackgroundColor: AppColorsDark.scaffoldBackground,
-  appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
+  canvasColor: Colors.black,
+  appBarTheme: AppBarTheme(backgroundColor: Colors.black),
 );
 
 
