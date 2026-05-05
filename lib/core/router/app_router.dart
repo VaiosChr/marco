@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marco/core/router/nav_bar.dart';
 import 'package:marco/features/auth/presentation/providers/auth_provider.dart';
+import 'package:marco/features/settings/presentation/settings_screen.dart';
 
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/otp_screen.dart';
@@ -27,145 +29,8 @@ abstract class AppRoutes {
   static const tripLog = '/trip-log';
   static const rewards = '/rewards';
   static const kidView = '/kid';
+  static const settings = '/settings';
 }
-
-// ---------------------------------------------------------------------------
-// Router provider — depends on auth state so redirects are reactive
-// ---------------------------------------------------------------------------
-// final appRouterProvider = Provider<GoRouter>((ref) {
-//   return GoRouter(
-//     initialLocation: AppRoutes.splash,
-
-//     // ----- Auth guard -----
-//     redirect: (context, state) {
-//       final authState = ref.read(authProvider);
-
-//       if (authState.isLoading) {
-//         return null;
-//       }
-
-//       final isAuthenticated = authState.isAuthenticated;
-//       final isOnAuthFlow =
-//           state.matchedLocation == AppRoutes.signup ||
-//           state.matchedLocation == AppRoutes.otp;
-
-//       // Not logged in and trying to reach a protected screen → signup
-//       if (!isAuthenticated && !isOnAuthFlow) {
-//         return AppRoutes.signup;
-//         // return AppRoutes.addChild; // TEMP: skip auth for easier testing
-//       }
-
-//       // Already logged in and landing on auth screens → go home
-//       if (isAuthenticated && isOnAuthFlow) {
-//         return AppRoutes.rewards;
-//       }
-
-//       // Once loading finishes, handle the initial screen location
-//       if (state.matchedLocation == AppRoutes.splash) {
-//         return isAuthenticated ? AppRoutes.rewards : AppRoutes.signup;
-//       }
-
-//       return null; // no redirect needed
-//     },
-
-//     routes: [
-//       GoRoute(
-//         path: AppRoutes.splash,
-//         name: 'splash',
-//         builder: (context, state) =>
-//             const Scaffold(body: Center(child: CircularProgressIndicator())),
-//       ),
-
-//       // ── Screen 1: Parent sign-up ──────────────────────────────────────
-//       GoRoute(
-//         path: AppRoutes.signup,
-//         name: 'signup',
-//         builder: (context, state) => SignupScreen(),
-//       ),
-
-//       // ── Screen 2: OTP verification ────────────────────────────────────
-//       // phoneNumber is passed as a query param so the screen knows what to display
-//       GoRoute(
-//         path: AppRoutes.otp,
-//         name: 'otp',
-//         builder: (context, state) {
-//           final phone = state.uri.queryParameters['phone'] ?? '';
-//           return OtpScreen(phoneNumber: phone);
-//         },
-//       ),
-
-//       // ── Screen 3: Add child & invite co-parent ────────────────────────
-//       // childId is optional — null means "new child", non-null means "edit"
-//       GoRoute(
-//         path: AppRoutes.addChild,
-//         name: 'addChild',
-//         builder: (context, state) {
-//           final childId = state.uri.queryParameters['childId'];
-//           return AddChildScreen(childId: childId);
-//         },
-//       ),
-
-//       // ── Screen 4: Route entry (map) ───────────────────────────────────
-//       GoRoute(
-//         path: AppRoutes.routeEntry,
-//         name: 'routeEntry',
-//         builder: (context, state) {
-//           final childId = state.uri.queryParameters['childId'] ?? '';
-//           return RouteEntryScreen(childId: childId);
-//         },
-//       ),
-
-//       // ── Screen 5: Live route status ───────────────────────────────────
-//       GoRoute(
-//         path: AppRoutes.liveStatus,
-//         name: 'liveStatus',
-//         builder: (context, state) {
-//           final routeId = state.uri.queryParameters['routeId'] ?? '';
-//           return LiveStatusScreen(routeId: routeId);
-//         },
-//       ),
-
-//       // ── Screen 6: AI suggestion ───────────────────────────────────────
-//       GoRoute(
-//         path: AppRoutes.aiSuggestion,
-//         name: 'aiSuggestion',
-//         builder: (context, state) {
-//           final routeId = state.uri.queryParameters['routeId'] ?? '';
-//           return AiSuggestionScreen(routeId: routeId);
-//         },
-//       ),
-
-//       // ── Screen 7: Manual trip log ─────────────────────────────────────
-//       GoRoute(
-//         path: AppRoutes.tripLog,
-//         name: 'tripLog',
-//         builder: (context, state) => const TripLogScreen(),
-//       ),
-
-//       // ── Screen 8: Rewards ─────────────────────────────────────────────
-//       GoRoute(
-//         path: AppRoutes.rewards,
-//         name: 'rewards',
-//         builder: (context, state) => const RewardsScreen(),
-//       ),
-
-//       // ── Screen 9 (bonus): Kid view ────────────────────────────────────
-//       // Accessed via deep link: marco://kid?childId=abc123
-//       GoRoute(
-//         path: AppRoutes.kidView,
-//         name: 'kidView',
-//         builder: (context, state) {
-//           final childId = state.uri.queryParameters['childId'] ?? '';
-//           return KidHomeScreen(childId: childId);
-//         },
-//       ),
-//     ],
-
-//     // ----- Error fallback -----
-//     errorBuilder: (context, state) =>
-//         Scaffold(body: Center(child: Text('Page not found: ${state.error}'))),
-//   );
-// });
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -241,53 +106,67 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // ── Screen 4: Route entry (map) ───────────────────────────────────
-      GoRoute(
-        path: AppRoutes.routeEntry,
-        name: 'routeEntry',
-        builder: (context, state) => RouteEntryScreen(
-          childId: state.uri.queryParameters['childId'] ?? '',
-        ),
-      ),
+      ShellRoute(
+        builder: (context, state, child) {
+          return ScaffoldWithNavBar(child: child);
+        },
+        routes: [
+          // ── Screen 4: Route entry (map) ───────────────────────────────
+          GoRoute(
+            path: AppRoutes.routeEntry,
+            name: 'routeEntry',
+            builder: (context, state) => RouteEntryScreen(
+              childId: state.uri.queryParameters['childId'] ?? '',
+            ),
+          ),
 
-      // ── Screen 5: Live route status ───────────────────────────────────
-      GoRoute(
-        path: AppRoutes.liveStatus,
-        name: 'liveStatus',
-        builder: (context, state) => LiveStatusScreen(
-          routeId: state.uri.queryParameters['routeId'] ?? '',
-        ),
-      ),
+          // ── Screen 5: Live route status ───────────────────────────────
+          GoRoute(
+            path: AppRoutes.liveStatus,
+            name: 'liveStatus',
+            builder: (context, state) => LiveStatusScreen(
+              routeId: state.uri.queryParameters['routeId'] ?? '',
+            ),
+          ),
 
-      // ── Screen 6: AI suggestion ───────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.aiSuggestion,
-        name: 'aiSuggestion',
-        builder: (context, state) => AiSuggestionScreen(
-          routeId: state.uri.queryParameters['routeId'] ?? '',
-        ),
-      ),
+          // ── Screen 6: AI suggestion ───────────────────────────────────
+          GoRoute(
+            path: AppRoutes.aiSuggestion,
+            name: 'aiSuggestion',
+            builder: (context, state) => AiSuggestionScreen(
+              routeId: state.uri.queryParameters['routeId'] ?? '',
+            ),
+          ),
 
-      // ── Screen 7: Manual trip log ─────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.tripLog,
-        name: 'tripLog',
-        builder: (context, state) => const TripLogScreen(),
-      ),
+          // ── Screen 7: Manual trip log ─────────────────────────────────
+          GoRoute(
+            path: AppRoutes.tripLog,
+            name: 'tripLog',
+            builder: (context, state) => const TripLogScreen(),
+          ),
 
-      // ── Screen 8: Rewards ─────────────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.rewards,
-        name: 'rewards',
-        builder: (context, state) => const RewardsScreen(),
-      ),
+          // ── Screen 8: Rewards ─────────────────────────────────────────
+          GoRoute(
+            path: AppRoutes.rewards,
+            name: 'rewards',
+            builder: (context, state) => const RewardsScreen(),
+          ),
 
-      // ── Screen 9 (bonus): Kid view ────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.kidView,
-        name: 'kidView',
-        builder: (context, state) =>
-            KidHomeScreen(childId: state.uri.queryParameters['childId'] ?? ''),
+          // ── Screen 9 (bonus): Kid view ────────────────────────────────
+          GoRoute(
+            path: AppRoutes.kidView,
+            name: 'kidView',
+            builder: (context, state) => KidHomeScreen(
+              childId: state.uri.queryParameters['childId'] ?? '',
+            ),
+          ),
+
+          GoRoute(
+            path: AppRoutes.settings,
+            name: 'settings',
+            builder: (context, state) => const SettingsScreen(),
+          ),
+        ],
       ),
     ],
 

@@ -5,6 +5,9 @@ class TripLogScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Trip Log')),
+      body: const Center(child: Text('Your trip logs will appear here!')),
+    );
   }
 }
