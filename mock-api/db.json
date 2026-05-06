@@ -18,6 +18,15 @@
       "neighborhood": "Dendropotamos",
       "isGuardianConfirmed": true,
       "id": "6cZ_P2y"
+    },
+    {
+      "name": "vaios",
+      "email": "vaios@gmail.com",
+      "password": "asdfasdf",
+      "phoneNumber": "+301234567897",
+      "neighborhood": "Eleftherio-Kordelio",
+      "isGuardianConfirmed": true,
+      "id": "eF0PeUG"
     }
   ],
   "sessions": [
@@ -62,6 +71,22 @@
       },
       "createdAt": "2026-05-05T12:41:48.058225",
       "id": "GjaZBN9"
+    },
+    {
+      "parentId": "eF0PeUG",
+      "name": "Jason",
+      "age": 6,
+      "school": "3rd Primary School",
+      "phone": "+306912345678",
+      "coParentPhone": null,
+      "coParentEmail": null,
+      "consents": {
+        "anonymizedRouteData": true,
+        "aiRouteSuggestions": true,
+        "municipalityDataSharing": false
+      },
+      "createdAt": "2026-05-06T11:27:51.602172",
+      "id": "-z8xNfr"
     }
   ],
   "routes": [
@@ -101,6 +126,30 @@
         "40.60707918303797,22.984187540472405"
       ],
       "id": "ku9Bqma"
+    },
+    {
+      "name": "test route 2",
+      "waypoints": [
+        "40.60811172063525,22.972855862426744",
+        "40.61078326292308,22.97843485717772"
+      ],
+      "id": "xyJmdU-"
+    },
+    {
+      "name": "route 3",
+      "waypoints": [
+        "40.60596137731579,22.96942263488768",
+        "40.61267282590672,22.975259121704088",
+        "40.61716846784483,22.978005703735338"
+      ],
+      "id": "iVV3Sne"
+    },
+    {
+      "name": "e",
+      "waypoints": [
+        "40.601921151246046,22.97019511108397"
+      ],
+      "id": "41yg8Ik"
     }
   ],
   "route_status": [

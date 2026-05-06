@@ -93,6 +93,7 @@ class _RouteEntryScreenState extends ConsumerState<RouteEntryScreen> {
       appBar: childState.isLoading
           ? null
           : AppBar(
+              titleSpacing: 0,
               leading: Icon(
                 Icons.person,
                 color: Theme.of(context).primaryColor,
@@ -116,18 +117,18 @@ class _RouteEntryScreenState extends ConsumerState<RouteEntryScreen> {
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Name your route', style: AppTextStyles.headline2),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       CustomFormField(
                         controller: _routeNameController,
                         label: 'Route Name',
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       Text(
                         'Tap on the map to add waypoints',
                         style: AppTextStyles.bodySmall,
@@ -150,9 +151,10 @@ class _RouteEntryScreenState extends ConsumerState<RouteEntryScreen> {
                       ),
                       const SizedBox(height: 8),
                       SizedBox(
-                        height: 350,
+                        height: 250,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(24),
+
                           child: FlutterMap(
                             options: MapOptions(
                               initialCenter: _startPoint,

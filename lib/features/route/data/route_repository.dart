@@ -11,4 +11,8 @@ class RouteRepository {
   }) async {
     await _api.post('/routes', body: {'name': name, 'waypoints': waypoints});
   }
+
+  Future<Map<String, dynamic>> getRouteStatus() async {
+    return await _api.get('/route-status', queryParameters: {'routeId': 'r1'});
+  }
 }

@@ -1,7 +1,3 @@
-// middleware.js
-// json-server middleware for MARCO mock API
-// Run with: json-server --watch db.json --routes routes.json --middlewares middleware.js --port 3000
-
 module.exports = (req, res, next) => {
   // ── CORS headers (useful during Flutter dev) ──────────────────────────────
   res.header('Access-Control-Allow-Origin', '*');
@@ -9,8 +5,18 @@ module.exports = (req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   if (req.method === 'OPTIONS') return res.sendStatus(200);
 
+  // ── Normalize Path ────────────────────────────────────────────────────────
+  let path = req.path;
+
+  if (path === '/api/otp/request' || path === '/api/otp/verify') {
+    path = '/otp_requests';
+  } else {
+    // Remove the /api prefix and convert hyphens to underscores
+    path = path.replace(/^\/api/, '').replace(/-/g, '_');
+  }
+
   // ── POST /api/otp/request  →  always succeed, return mock OTP id ──────────
-  if (req.method === 'POST' && req.path === '/otp_requests') {
+  if (req.method === 'POST' && path === '/otp_requests' && req.query.action !== 'verify') {
     const phone = req.body?.phone || 'unknown';
     console.log(`[OTP] Sending mock OTP to ${phone}. Any 6-digit code will be accepted on verify.`);
     return res.status(200).json({
@@ -22,7 +28,7 @@ module.exports = (req, res, next) => {
   }
 
   // ── POST /api/otp/verify  →  accept any 6-digit code ─────────────────────
-  if (req.method === 'POST' && req.path === '/otp_requests' && req.query.action === 'verify') {
+  if (req.method === 'POST' && path === '/otp_requests' && req.query.action === 'verify') {
     const { code } = req.body || {};
     if (/^\d{6}$/.test(code)) {
       return res.status(200).json({ verified: true, message: 'Phone verified successfully.' });
@@ -31,9 +37,7 @@ module.exports = (req, res, next) => {
   }
 
   // ── POST /api/sessions (login)  →  naive email/password check ────────────
-  // Real auth is out of scope; this just returns a mock token so Flutter
-  // can persist something locally.
-  if (req.method === 'POST' && req.path === '/sessions') {
+  if (req.method === 'POST' && path === '/sessions') {
     const { email, password } = req.body || {};
     if (!email || !password) {
       return res.status(400).json({ error: 'email and password required' });
@@ -48,28 +52,47 @@ module.exports = (req, res, next) => {
   }
 
   // ── GET /api/route-status?routeId=X  →  return live-ish mock values ───────
-  // Randomise values slightly so the Flutter app can simulate polling updates.
-  if (req.method === 'GET' && req.path === '/route_status' && req.query.routeId) {
-    const safety     = +(7 + Math.random() * 3).toFixed(1);          // 7–10
-    const airQuality = +(5 + Math.random() * 5).toFixed(1);          // 5–10
-    const noiseDb    = Math.floor(50 + Math.random() * 30);          // 50–80
-    let overallStatus = 'OK';
-    if (airQuality < 6 || safety < 7 || noiseDb > 70) overallStatus = 'CAUTION';
-    if (airQuality < 4 || safety < 5 || noiseDb > 80) overallStatus = 'ALERT';
+  if (req.method === 'GET' && path === '/route_status' && req.query.routeId) {
+    const safety     = +(6 + Math.random() * 4).toFixed(1);          // 6–10
+    const airQuality = +(3 + Math.random() * 7).toFixed(1);          // 3–10
+    const noiseDb    = Math.floor(45 + Math.random() * 40);          // 45–85
+
+    let totalPenalty = 0;
+
+    if (safety < 8.0) {
+      totalPenalty += (8.0 - safety) * 12; // Lower safety = higher penalty rate
+    }
+
+    if (airQuality < 6.5) {
+      totalPenalty += (6.5 - airQuality) * 10;
+    }
+
+    if (noiseDb > 70) {
+      totalPenalty += (noiseDb - 70) * 1.5; // Penalty increases with decibels above 70
+    }
+
+    let overallStatus = 'GOOD';
+    
+    if (totalPenalty >= 35) {
+      overallStatus = 'ALERT';
+    } else if (totalPenalty >= 15) {
+      overallStatus = 'CAUTION';
+    }
 
     return res.status(200).json({
       id: `rs_live_${Date.now()}`,
       routeId: req.query.routeId,
-      safety,
-      airQuality,
-      noiseDb,
+      safety: parseFloat(safety),
+      airQuality: parseFloat(airQuality),
+      noiseDb: parseInt(noiseDb),
       overallStatus,
+      metricsScore: Math.max(0, Math.min(100, Math.floor(100 - totalPenalty))), // Useful secondary metric
       updatedAt: new Date().toISOString()
     });
   }
 
   // ── POST /api/suggestion-feedback  →  echo back with points awarded ───────
-  if (req.method === 'POST' && req.path === '/suggestion_feedback') {
+  if (req.method === 'POST' && path === '/suggestion_feedback') {
     const { suggestionId, liked, stars } = req.body || {};
     const pointsEarned = liked ? 50 : 5;
     return res.status(201).json({
@@ -86,7 +109,7 @@ module.exports = (req, res, next) => {
   }
 
   // ── POST /api/trip-logs  →  calculate and attach pointsEarned ────────────
-  if (req.method === 'POST' && req.path === '/trip_logs') {
+  if (req.method === 'POST' && path === '/trip_logs') {
     const { routeTaken } = req.body || {};
     let pointsEarned = 10; // base for any trip log
     if (routeTaken === 'suggested') pointsEarned = 50;

@@ -115,6 +115,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
+      // ── Screen 4: Manual trip log ────────────────────────────────────
+      GoRoute(
+        path: AppRoutes.tripLog,
+        name: 'tripLog',
+        builder: (context, state) => const TripLogScreen(),
+      ),
+
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
@@ -127,22 +134,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.routeEntry,
                 name: 'routeEntry',
                 builder: (context, state) => RouteEntryScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'live-status',
-                    name: 'liveStatus',
-                    builder: (context, state) => LiveStatusScreen(
-                      routeId: state.uri.queryParameters['routeId'] ?? '',
-                    ),
-                  ),
-                  GoRoute(
-                    path: 'ai-suggestion',
-                    name: 'aiSuggestion',
-                    builder: (context, state) => AiSuggestionScreen(
-                      routeId: state.uri.queryParameters['routeId'] ?? '',
-                    ),
-                  ),
-                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              // ── Screen 5: Live Status ─────────────────────────────────
+              GoRoute(
+                path: AppRoutes.liveStatus,
+                name: 'liveStatus',
+                builder: (context, state) => LiveStatusScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              // ── Screen 5: Live Status ─────────────────────────────────
+              GoRoute(
+                path: AppRoutes.aiSuggestion,
+                name: 'aiSuggestion',
+                builder: (context, state) => AiSuggestionScreen(
+                  routeId: state.uri.queryParameters['routeId'] ?? '',
+                ),
               ),
             ],
           ),
@@ -153,16 +166,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.rewards,
                 name: 'rewards',
                 builder: (context, state) => const RewardsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              // ── Screen 7: Manual trip log ─────────────────────────────
-              GoRoute(
-                path: AppRoutes.tripLog,
-                name: 'tripLog',
-                builder: (context, state) => const TripLogScreen(),
               ),
             ],
           ),

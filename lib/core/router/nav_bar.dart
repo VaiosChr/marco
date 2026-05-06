@@ -25,12 +25,16 @@ class ScaffoldWithNavBar extends StatelessWidget {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.route), label: 'Route'),
             BottomNavigationBarItem(
-              icon: Icon(Icons.card_giftcard),
-              label: 'Rewards',
+              icon: Icon(Icons.light_mode),
+              label: 'Status',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.credit_card),
-              label: 'Log',
+              icon: Icon(Icons.trip_origin),
+              label: 'MARCO',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.card_giftcard),
+              label: 'Rewards',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
