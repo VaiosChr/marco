@@ -80,7 +80,7 @@ class LiveStatusScreen extends ConsumerWidget {
                   width: double.infinity,
                   child: CustomButton(
                     onPressed: () {
-                      context.pushReplacementNamed(
+                      context.goNamed(
                         'aiSuggestion',
                         queryParameters: {'routeId': 'r1'},
                       );

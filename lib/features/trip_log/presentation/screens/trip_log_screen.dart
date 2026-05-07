@@ -158,6 +158,6 @@ class _TripLogScreenState extends ConsumerState<TripLogScreen> {
 
     showScaffoldMessage(context, 'Trip logged successfully!');
 
-    context.pushReplacementNamed('rewards');
+    context.goNamed('rewards');
   }
 }

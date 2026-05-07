@@ -287,6 +287,6 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
       return;
     }
 
-    context.pushReplacementNamed('rewards');
+    context.goNamed('rewards');
   }
 }
