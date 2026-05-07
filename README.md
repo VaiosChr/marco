@@ -1,17 +1,59 @@
-# marco
+# MARCO
 
-A new Flutter project.
+MARCO is a Flutter application scaffolded with Riverpod state management, GoRouter for navigation, and Flutter Map for map features. This repository contains the app source, platform builds, and example mock API used during development.
 
-## Getting Started
+**Quick Summary**
+- **Project**: MARCO
+- **Language**: Dart + Flutter
+- **State management**: `flutter_riverpod`
+- **Routing**: `go_router`
+- **Mapping**: `flutter_map` + `latlong2`
+- **HTTP clients**: `dio`, `http`
 
-This project is a starting point for a Flutter application.
+**Contents**
+- **Source**: [lib](lib)
+- **Android**: [android](android)
+- **iOS**: [ios](ios)
+- **Linux**: [linux](linux)
+- **Mock API**: [mock-api](mock-api)
+- **Pubspec**: [pubspec.yaml](pubspec.yaml)
 
-A few resources to get you started if this is your first Flutter project:
+**Prerequisites**
+- Install Flutter (SDK >= 3.11.4) and set up your platform toolchains: Android SDK, Xcode (macOS), or development packages for Linux/Windows as needed.
+- Ensure `flutter` is on your PATH and run `flutter doctor` to verify setup.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Getting started
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repo and fetch dependencies:
+
+	`git clone <repo-url>`
+	`cd marco`
+	`flutter pub get`
+
+2. Run the app on the default device/emulator:
+
+	`flutter run`
+
+3. To run for a specific platform, pass a device or target flag, for example:
+
+	- `flutter run -d linux`
+	- `flutter run -d android` (or use an Android emulator/device)
+	- `flutter run -d web-server` (for web builds)
+
+Building
+
+- Android (APK): `flutter build apk`
+- Android (AAB): `flutter build appbundle`
+- iOS: `flutter build ios`
+- Web: `flutter build web`
+- Linux: `flutter build linux`
+
+Project structure notes
+
+- `lib/main.dart`: app entry point. See [lib/main.dart](lib/main.dart) for startup logic.
+- `lib/core`, `lib/features`, `lib/shared`: separated by responsibility (core services, feature modules, shared widgets).
+- `mock-api`: a simple mock API used during development; start it with `npn start` (ensure dependencies are installed with `npm install`).
+
+Contact
+
+vaioschristodoulou@gmail.com
