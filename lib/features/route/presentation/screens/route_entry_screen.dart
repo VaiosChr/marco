@@ -265,6 +265,7 @@ class _RouteEntryScreenState extends ConsumerState<RouteEntryScreen> {
       _routeNameController.clear();
       _waypoints.clear();
     });
+
     showScaffoldMessage(context, 'Route saved successfully!');
   }
 }

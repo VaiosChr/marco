@@ -150,6 +150,14 @@
         "40.601921151246046,22.97019511108397"
       ],
       "id": "41yg8Ik"
+    },
+    {
+      "name": "test3",
+      "waypoints": [
+        "40.6066781661099,22.972598370361315",
+        "40.61071810462578,22.979121502685533"
+      ],
+      "id": "OK8Wj4R"
     }
   ],
   "route_status": [
@@ -215,80 +223,49 @@
     {
       "id": "rw1",
       "parentId": "p1",
-      "totalPoints": 170,
-      "level": 2,
-      "levelName": "Green Walker",
-      "streakDays": 5,
-      "nextLevelPoints": 300,
+      "totalPoints": 2340,
+      "level": 4,
+      "levelName": "Eco Explorer",
+      "streakDays": 12,
+      "nextLevelPoints": 3000,
       "badges": [
         {
           "id": "b1",
-          "name": "First Steps",
-          "description": "Logged your first trip",
-          "icon": "🥾",
-          "earnedAt": "2026-01-02T09:00:00Z"
+          "name": "Park guardian",
+          "icon": "🌳",
+          "achievedAt": "2026-04-15T10:00:00Z",
+          "unlocked": true
         },
         {
           "id": "b2",
-          "name": "Air Aware",
-          "description": "Used an AI suggestion to avoid pollution",
-          "icon": "💨",
-          "earnedAt": "2026-01-08T09:00:00Z"
+          "name": "Safe walker",
+          "icon": "🚸",
+          "achievedAt": "2026-04-20T14:30:00Z",
+          "unlocked": true
         },
         {
           "id": "b3",
-          "name": "5-Day Streak",
-          "description": "Walked 5 days in a row",
-          "icon": "🔥",
-          "earnedAt": "2026-01-10T09:00:00Z"
+          "name": "Eco hero",
+          "icon": "🌿",
+          "achievedAt": "2026-04-25T16:45:00Z",
+          "unlocked": true
+        },
+        {
+          "id": "b4",
+          "name": "Mystery",
+          "icon": "🔒",
+          "unlocked": false
         }
       ],
       "dailyChallenge": {
         "id": "dc1",
-        "description": "Log today's trip before 9 AM",
-        "rewardPoints": 20,
-        "progress": 0,
+        "description": "Try MARCO's suggestion",
+        "rewardPoints": 50,
         "total": 1,
-        "completed": false,
-        "expiresAt": "2026-05-01T23:59:59Z"
+        "completed": true,
+        "expiresAt": "2026-05-07T23:59:59Z"
       },
       "updatedAt": "2026-04-29T09:00:00Z"
-    }
-  ],
-  "kid_profiles": [
-    {
-      "id": "kp1",
-      "childId": "c1",
-      "name": "Alex",
-      "avatarEmoji": "🦊",
-      "totalPoints": 85,
-      "level": 1,
-      "levelName": "Little Explorer",
-      "streakDays": 5,
-      "todayWalk": {
-        "routeName": "Morning Route",
-        "status": "CAUTION",
-        "tip": "The air is a little smoky today. Try breathing through your nose! 👃"
-      },
-      "recentMoods": [
-        "happy",
-        "neutral",
-        "happy",
-        "happy",
-        "excited"
-      ],
-      "badges": [
-        {
-          "id": "kb1",
-          "name": "Explorer",
-          "icon": "🗺️"
-        },
-        {
-          "id": "kb2",
-          "name": "Sunshine Walker",
-          "icon": "☀️"
-        }
-      ]
     }
   ]
 }

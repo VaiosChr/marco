@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
+import 'package:marco/core/services/mock_api_service.dart';
+import 'package:marco/core/utils/scaffold_message.dart';
+import 'package:marco/features/ai_suggestion/data/suggestion_repository.dart';
 import 'package:marco/shared/widgets/custom_buttons.dart';
 
-class AiSuggestionScreen extends StatelessWidget {
+class AiSuggestionScreen extends ConsumerStatefulWidget {
   final String routeId;
   const AiSuggestionScreen({super.key, required this.routeId});
+
+  @override
+  ConsumerState<AiSuggestionScreen> createState() => _AiSuggestionScreenState();
+}
+
+class _AiSuggestionScreenState extends ConsumerState<AiSuggestionScreen> {
+  int _rating = 0;
+  bool _isUseful = false, _isNotUseful = false;
 
   @override
   Widget build(BuildContext context) {
@@ -143,10 +155,24 @@ class AiSuggestionScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _isUseful = true;
+                            _isNotUseful = false;
+                          });
+                        },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColorsLight.primary,
-                          side: BorderSide(color: AppColorsLight.primary),
+                          backgroundColor: _isUseful
+                              ? AppColorsLight.primary.withAlpha(30)
+                              : Colors.transparent,
+                          foregroundColor: _isUseful
+                              ? AppColorsLight.primary
+                              : Colors.grey,
+                          side: BorderSide(
+                            color: _isUseful
+                                ? AppColorsLight.primary
+                                : Colors.grey,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -157,10 +183,24 @@ class AiSuggestionScreen extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _isUseful = false;
+                            _isNotUseful = true;
+                          });
+                        },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColorsLight.primary,
-                          side: BorderSide(color: AppColorsLight.primary),
+                          backgroundColor: _isNotUseful
+                              ? AppColorsLight.primary.withAlpha(30)
+                              : Colors.transparent,
+                          foregroundColor: _isNotUseful
+                              ? AppColorsLight.primary
+                              : Colors.grey,
+                          side: BorderSide(
+                            color: _isNotUseful
+                                ? AppColorsLight.primary
+                                : Colors.grey,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -174,12 +214,25 @@ class AiSuggestionScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(5, (index) {
+                    final starIndex = index + 1;
+                    final isSelected = starIndex <= _rating;
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Icon(
-                        Icons.star_border,
-                        color: Colors.yellow[700],
-                        size: 28,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _rating = starIndex;
+                          });
+                        },
+                        icon: Icon(
+                          isSelected ? Icons.star : Icons.star_border,
+                          color: Colors.yellow[700],
+                          size: 28,
+                        ),
+                        splashRadius: 22,
+                        tooltip:
+                            'Rate $starIndex star${starIndex == 1 ? '' : 's'}',
                       ),
                     );
                   }),
@@ -188,9 +241,7 @@ class AiSuggestionScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: CustomButton(
-                    onPressed: () {
-                      context.pushReplacementNamed('tripLog');
-                    },
+                    onPressed: () => _submitFeedback(),
                     text: 'Continue',
                   ),
                 ),
@@ -200,5 +251,29 @@ class AiSuggestionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _submitFeedback() {
+    if (_isUseful == false && _isNotUseful == false) {
+      showScaffoldMessage(
+        context,
+        'Please indicate whether the suggestion was useful or not before submitting your feedback.',
+      );
+      return;
+    }
+    if (_rating == 0) {
+      showScaffoldMessage(
+        context,
+        'Please select at least one star rating before submitting your feedback.',
+      );
+      return;
+    }
+
+    final repo = FeedbackRepository(ref.read(mockApiServiceProvider));
+    repo.submitFeedback(rating: _rating, isUseful: _isUseful);
+
+    showScaffoldMessage(context, 'Thank you for your feedback!');
+
+    context.pushNamed('tripLog');
   }
 }

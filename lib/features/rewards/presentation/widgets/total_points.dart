@@ -3,7 +3,14 @@ import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
 
 class TotalPoints extends StatelessWidget {
-  const TotalPoints({super.key});
+  final int points;
+  final int nextLevelPoints;
+
+  const TotalPoints({
+    super.key,
+    required this.points,
+    required this.nextLevelPoints,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +32,14 @@ class TotalPoints extends StatelessWidget {
                 style: AppTextStyles.body.copyWith(color: Colors.white),
               ),
               Text(
-                'Next Level: 3,000 pts',
+                'Next Level: $nextLevelPoints pts',
                 style: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            '2,340',
+            '$points',
             style: AppTextStyles.headline2.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 8),

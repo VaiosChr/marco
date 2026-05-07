@@ -3,7 +3,9 @@ import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
 
 class StreakContainer extends StatelessWidget {
-  const StreakContainer({super.key});
+  final int streakDays;
+
+  const StreakContainer({super.key, required this.streakDays});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class StreakContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '12-day streak',
+                      '$streakDays-day streak',
                       style: AppTextStyles.body.copyWith(
                         color: Theme.of(context).primaryColor,
                       ),

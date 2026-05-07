@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:marco/core/constants/app_colors.dart';
 import 'package:marco/core/constants/app_text_styles.dart';
+import 'package:marco/features/rewards/domain/models/daily_challenge_model.dart';
 
 class DailyChallenge extends StatelessWidget {
-  const DailyChallenge({super.key});
+  final DailyChallengeModel dailyChallenge;
+
+  const DailyChallenge({super.key, required this.dailyChallenge});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +23,9 @@ class DailyChallenge extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Try MARCO\'s suggestion', style: AppTextStyles.body),
+              Text(dailyChallenge.description, style: AppTextStyles.body),
               Text(
-                '+50 pts',
+                '+${dailyChallenge.rewardPoints} pts',
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColorsLight.secondary,
                 ),
@@ -33,7 +36,7 @@ class DailyChallenge extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
-              value: 1,
+              value: dailyChallenge.completed ? 1.0 : 0.5,
               backgroundColor: Theme.of(context).focusColor,
               valueColor: AlwaysStoppedAnimation<Color>(
                 AppColorsLight.secondary,
@@ -43,9 +46,11 @@ class DailyChallenge extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '✓ Completed!',
+            dailyChallenge.completed ? '✓ Completed!' : 'In Progress',
             style: AppTextStyles.bodySmall.copyWith(
-              color: AppColorsLight.primary,
+              color: dailyChallenge.completed
+                  ? AppColorsLight.primary
+                  : Colors.grey,
             ),
           ),
         ],
