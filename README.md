@@ -57,3 +57,32 @@ Project structure notes
 Contact
 
 vaioschristodoulou@gmail.com
+
+## Screens
+
+### Signup Flow
+
+<table>
+	<tr>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-44-02.png" alt="Signup flow screenshot 1" width="100%" /></td>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-44-11.png" alt="Signup flow screenshot 2" width="100%" /></td>
+	</tr>
+	<tr>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2011-01-51.png" alt="Signup flow screenshot 3" width="100%" /></td>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-44-53.png" alt="Signup flow screenshot 4" width="100%" /></td>
+	</tr>
+</table>
+
+### Main Screens
+
+<table>
+	<tr>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-43-05.png" alt="Main screen screenshot 1" width="100%" /></td>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-43-13.png" alt="Main screen screenshot 2" width="100%" /></td>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-43-20.png" alt="Main screen screenshot 3" width="100%" /></td>
+	</tr>
+	<tr>
+		<td><img src="assets/images/Screenshot%20from%202026-05-07%2010-43-24.png" alt="Main screen screenshot 4" width="100%" /></td>
+        <td><img src="assets/images/Screenshot%20from%202026-05-07%2010-57-13.png" alt="Main screen screenshot 5" width="100%" /></td>
+	</tr>
+</table>
