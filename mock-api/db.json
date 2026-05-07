@@ -217,6 +217,14 @@
       "notes": "",
       "pointsEarned": 10,
       "createdAt": "2026-04-29T09:00:00Z"
+    },
+    {
+      "routeName": "⭐ MARCO suggestion",
+      "commute_mode": "Bus",
+      "route_feel": 4,
+      "pointsEarned": 10,
+      "createdAt": "2026-05-07T07:17:47.868Z",
+      "id": "oWZPWt8"
     }
   ],
   "rewards": [
