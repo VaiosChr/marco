@@ -47,41 +47,53 @@ class _HomeAreaDropdownState extends State<HomeAreaDropdown> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DropdownButtonFormField<String>(
-          initialValue: _selectedArea,
-          hint: const Text('Select an area', style: AppTextStyles.bodyHint),
-          borderRadius: BorderRadius.circular(20),
-          dropdownColor: Colors.white,
-          onChanged: (String? newValue) {
-            setState(() {
-              _selectedArea = newValue;
-            });
-            if (newValue != null) {
-              widget.onAreaSelected(newValue);
-            }
-          },
-          items: thessalonikiAreas.map<DropdownMenuItem<String>>((
-            String value,
-          ) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value, style: AppTextStyles.body),
-            );
-          }).toList(),
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.location_on, size: 18),
-            fillColor: Colors.white,
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 16.0,
-            ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x1A000000),
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
-          isExpanded: true,
+          child: DropdownButtonFormField<String>(
+            initialValue: _selectedArea,
+            hint: const Text('Select an area', style: AppTextStyles.bodyHint),
+            borderRadius: BorderRadius.circular(20),
+            dropdownColor: Colors.white,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedArea = newValue;
+              });
+              if (newValue != null) {
+                widget.onAreaSelected(newValue);
+              }
+            },
+            items: thessalonikiAreas.map<DropdownMenuItem<String>>((
+              String value,
+            ) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value, style: AppTextStyles.body),
+              );
+            }).toList(),
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.location_on, size: 18),
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 16.0,
+              ),
+            ),
+            isExpanded: true,
+          ),
         ),
         const SizedBox(height: 5),
         const Text(
